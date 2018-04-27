@@ -146,28 +146,11 @@ class Dog():
         self.age = age
 
 my_dog = Dog('willie', 6)
-print(my_dog.__dict__)
-print(Dog.__dict__.keys())
+print(my_dog.__dict__) # attributes of instances
+print(Dog.__dict__.keys()) # attributes of classes
 #output
-{'name': 'willie', 'age': 6}
-dict_keys(['__module__', '__init__', '__dict__', '__weakref__', '__doc__'])
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-class Dog():
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-    def __str__(self):
-        return "Dog's name is %s." % self.name 
-    def __add__(self, other):
-        return Dog(self.name + other, age = 6)
-my_dog = Dog('willie', 6)
-
-print(my_dog +' your_dog')
-#output
-Dog's name is willie your_dog.
+{'name': 'willie', 'age': 6} 
+dict_keys(['__module__', '__init__', '__dict__', '__weakref__', '__doc__']) # instances share
 </code></pre>
                     </div>
                 </section>
@@ -240,7 +223,7 @@ print(Husky.__mro__)
                     </div>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-class Animal(): # Diamond Problem
+class Animal(): 
     pass
 class Dog(Animal):
     pass
@@ -801,7 +784,10 @@ def get_stored_username():
         return None
     else:
         return username
-
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
 def greet_user():
 """Greet the user by name."""
     username = get_stored_username()
@@ -831,7 +817,10 @@ def get_stored_username():
         return None
     else:
         return username
-
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
 def get_new_username():
 """Prompt for a new username."""
     username = input("What is your name? ")
@@ -839,7 +828,10 @@ def get_new_username():
     with open(filename, 'w') as f_obj:
         json.dump(username, f_obj)
     return username
-
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
 def greet_user():
 """Greet the user by name."""
     username = get_stored_username()
@@ -877,7 +869,7 @@ import unittest
 function.py from name_function import get_formatted_name
 
 class NamesTestCase(unittest.TestCase):
-    def test_first_last_name(self):
+    def test_first_last_name(self): # should start with test_
         formatted_name = get_formatted_name('janis', 'joplin')
         self.assertEqual(formatted_name, 'Janis Joplin')
 
@@ -1097,20 +1089,20 @@ import unittest
 from survey import AnonymousSurvey
 class TestAnonymousSurvey(unittest.TestCase):
 
-def setUp(self):
-    question = "What language did you first learn to speak?"
-    self.my_survey = AnonymousSurvey(question)
-    self.responses = ['English', 'Spanish', 'Mandarin']
+    def setUp(self):
+        question = "What language did you first learn to speak?"
+        self.my_survey = AnonymousSurvey(question)
+        self.responses = ['English', 'Spanish', 'Mandarin']
 
-def test_store_single_response(self):
-    self.my_survey.store_response(self.responses[0])
-    self.assertIn(self.responses[0], self.my_survey.responses)
+    def test_store_single_response(self):
+        self.my_survey.store_response(self.responses[0])
+        self.assertIn(self.responses[0], self.my_survey.responses)
 
-def test_store_three_responses(self):
-    for response in self.responses:
-        self.my_survey.store_response(response)
-    for response in self.responses:
-        self.assertIn(response, self.my_survey.responses)
+    def test_store_three_responses(self):
+        for response in self.responses:
+            self.my_survey.store_response(response)
+        for response in self.responses:
+            self.assertIn(response, self.my_survey.responses)
 
 unittest.main()
 </code></pre>
@@ -1426,10 +1418,6 @@ import pygal
 die = Die()
 # Make some rolls, and store results in a list.
 results = []
-for roll_num in range(100):
-    result = die.roll()
-    results.append(result)
-print(results)
 for roll_num in range(1000):
     result = die.roll()
     results.append(result)
@@ -1504,7 +1492,7 @@ import csv
 
 filename = 'sitka_weather_07-2014.csv' 
 with open(filename) as f:
-    reader = csv.reader(f)
+    reader = csv.reader(f) #It is an iterator
     header_row = next(reader)
     print(header_row)
 
