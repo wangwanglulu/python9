@@ -1,0 +1,2255 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>reveal.js</title>
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/white.css">
+    <link rel="stylesheet" href="css/theme/custom.css">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <!-- Printing and PDF exports -->
+    <script>
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+
+<body>
+    <div class="reveal" style="background-color: #fff;">
+        <div class="slides">
+            <section data-background-video="bgm.mp4" data-background-video-loop data-background-video-muted style="text-align: left;">
+                <h2 style="color: white">Python Programming</h2>
+                <h5 style="color: white">Lecture 9 Advanced OOP, File</h5>
+            </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">9.1 Advanced OOP (1)</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Classes can intercept Python Operators</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Dog():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    def __str__(self):
+        return "Dog's name is %s." % self.name  
+
+
+my_dog = Dog('willie', 6)
+print(dir(my_dog))
+#output
+['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__',
+ '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', 
+ '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__',
+  '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 
+  'age', 'name']
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p><b>__str__</b></p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Dog():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+my_dog = Dog('willie', 6)
+print(my_dog)
+#output
+<__main__.Dog object at 0x053A3750>
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Dog():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    def __str__(self):
+        return "Dog's name is %s." % self.name  
+
+my_dog = Dog('willie', 6)
+print(my_dog)
+#output
+Dog's name is willie.
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p><b>__add__</b></p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Dog():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+my_dog = Dog('willie', 6)
+
+print(my_dog.name +' your_dog')
+#output
+willie your_dog
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Dog():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    def __str__(self):
+        return "Dog's name is %s." % self.name 
+    def __add__(self, other):
+        return Dog(self.name + other, age = 6)
+my_dog = Dog('willie', 6)
+
+x = my_dog +' your_dog' #It creates a new instance.
+print(x)
+#output
+Dog's name is willie your_dog.
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p><b>__dict__</b></p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Dog():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+my_dog = Dog('willie', 6)
+print(my_dog.__dict__)
+print(Dog.__dict__.keys())
+#output
+{'name': 'willie', 'age': 6}
+dict_keys(['__module__', '__init__', '__dict__', '__weakref__', '__doc__'])
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Dog():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    def __str__(self):
+        return "Dog's name is %s." % self.name 
+    def __add__(self, other):
+        return Dog(self.name + other, age = 6)
+my_dog = Dog('willie', 6)
+
+print(my_dog +' your_dog')
+#output
+Dog's name is willie your_dog.
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p><b>__doc__, __name__, __module__, __bases__</b></p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Dog():
+    "This is about dog class."
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+print(Dog.__doc__)
+print(Dog.__name__)
+print(Dog.__module__)
+print(Dog.__bases__)
+#output
+This is about dog class.
+Dog
+__main__
+(&lt;class 'object'&gt;,)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Dog():
+    "This is about dog class."
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+class Husky(Dog):
+    pass
+
+print(Husky.__bases__)
+#output
+(&lt;class '__main__.Dog'&gt;,)
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Multiple Inheritance and __mro__</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Animal():
+    def __init__(self, name):
+        self.name = name
+
+class Dog():
+    def __init__(self, name):
+        super().__init__(name)
+
+class Husky(Dog, Animal):
+    def __init__(self, name):
+        super().__init__(name)      
+
+print(Husky.__mro__)
+#output
+(&lt;class '__main__.Husky'&gt;, &lt;class '__main__.Dog'&gt;, 
+&lt;class '__main__.Animal'&gt;, &lt;class 'object'&gt;)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Animal(): # Diamond Problem
+    pass
+class Dog(Animal):
+    pass
+class Cat(Animal):
+    pass
+class X(Dog, Cat):
+    pass      
+
+print(X.__mro__)
+#output
+(&lt;class '__main__.Husky'&gt;, &lt;class '__main__.Dog'&gt;, &lt;class '__main__.Cat'&gt;,
+ &lt;class '__main__.Animal'&gt;, &lt;class 'object'&gt;)
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Animal():
+    pass
+class Dog(Animal):
+    pass
+class Cat(Animal):
+    pass
+class Husky(Dog):
+    pass
+class Persian(Cat):
+    pass
+class X(Husky, Persian):
+    pass      
+
+print(X.__mro__)
+#output
+(&lt;class '__main__.X'&gt;, &lt;class '__main__.Husky'&gt;, &lt;class '__main__.Dog'&gt;, 
+&lt;class '__main__.Persian'&gt;, &lt;class '__main__.Cat'&gt;, &lt;class '__main__.Animal'&gt;, 
+&lt;class 'object'&gt;)
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Animal():
+    pass
+class Dog(Animal):
+    pass
+class Cat(Animal):
+    pass
+class Husky(Dog, Cat):
+    pass
+class Persian(Dog, Cat):
+    pass
+class X(Husky, Persian):
+    pass      
+
+print(X.__mro__)
+#output
+(&lt;class '__main__.X'&gt;, &lt;class '__main__.Husky'&gt;, &lt;class '__main__.Persian'&gt;,
+ &lt;class '__main__.Dog'&gt;, &lt;class '__main__.Cat'&gt;, &lt;class '__main__.Animal'&gt;, 
+&lt;class 'object'&gt;)
+</code></pre>
+                    </div>
+                </section>
+                <section data-background-image="bg.png">
+                    <h3>Topological Sorting (C3)</h3>
+                    <div id='left'>
+                        <div class="fragment"><img data-src="1.png" style="height: 400pt"></div>
+                    </div>
+                    <div id='right'>
+                        <div class="fragment"><img data-src="2.png" style="height: 400pt"></div>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Animal():
+    pass
+class Dog(Animal):
+    pass
+class Cat(Animal):
+    pass
+class Husky(Dog, Cat):
+    pass
+class Persian(Cat, Dog):
+    pass
+class X(Husky, Persian):
+    pass      
+
+print(X.__mro__)
+# Error
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Animal():
+    pass
+class Dog(Animal):
+    pass
+class X(Animal, Dog):
+    pass
+print(X.__mro__)
+# Error
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <p><b>如果你一定要秀一波操作</b></p>
+                    <h3>MixIn Inheritance</h3>
+                    <div class="fragment"><img data-src="3.png" style="height: 300pt"></div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Animal():
+    pass
+
+class EatMixIn():
+    def eat(self):
+        print(self.name +" is eating.")
+class RunMixIn():
+    def run(self):
+        print(self.name +" is running.") 
+
+class Dog(Animal):
+    def __init__(self, name):
+        self.name = name
+
+class Cat(Animal):
+    def __init__(self, name):
+        self.name = name
+
+class Husky(Dog, EatMixIn, RunMixIn):
+    def __init__(self, name):
+        super().__init__(name)
+
+class Persian(Cat, EatMixIn, RunMixIn):
+    def __init__(self, name):
+        super().__init__(name)
+
+x = Husky("Willie")
+y = Persian("Coco")
+x.eat() # Willie is eating.
+x.run() # Willie is running.
+y.eat() # Coco is eating.
+y.run() # Coco is running.   
+</code></pre>
+                    </div>
+                </section>
+            </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">9.2 File</h2>
+                </section>
+                <section>
+                    <h3>Reading from a File</h3>
+                    <ul>
+                        <li class="fragment">
+                            <p>pi_digits.txt</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+3.1415926535
+8979323846
+2643383279
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+with open('pi_digits.txt') as file_object:
+    contents = file_object.read() # string
+    print(contents.rstrip())
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>File Path</h3>
+                    <ul>
+                        <li class="fragment">
+                            <p>relative path</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+with open('text_files/filename.txt') as file_object: # Linux or OSX
+with open('text_files\filename.txt') as file_object: # Windows
+</code></pre>
+                    </div>
+                    <ul>
+                        <li class="fragment">
+                            <p>absolute path</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+file_path = '/home/ehmatthes/other_files/text_files/filename.txt'
+with open(file_path) as file_object: # Linux or OSX
+file_path = 'C:\Users\ehmatthes\other_files\text_files\filename.txt'
+with open(file_path) as file_object: # Windows
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Reading Line by Line</h3>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+filename = 'pi_digits.txt'
+with open(filename) as file_object:
+    for line in file_object:
+        print(line)
+
+3.1415926535
+
+8979323846
+
+2643383279
+
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+filename = 'pi_digits.txt'
+with open(filename) as file_object:
+    for line in file_object:
+        print(line.rstrip())
+
+3.1415926535
+8979323846
+2643383279
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Making a List of Lines from a File</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+filename = 'pi_digits.txt'
+
+with open(filename) as file_object:
+    lines = file_object.readlines() #List
+
+for line in lines:
+    print(line.rstrip())
+</code></pre>
+                    </div>
+                    <ul>
+                        <li class="fragment">
+                            <p>Working with a File’s Contents</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+filename = 'pi_digits.txt'
+
+with open(filename) as file_object:
+    lines = file_object.readlines() # list read() works here
+
+pi_string = ''
+for line in lines:
+    pi_string += line.rstrip()
+print(pi_string)
+print(len(pi_string))
+
+3.141592653589793238462643383279 # string
+32
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Writing to a File</h3>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+filename = 'programming.txt'
+
+with open(filename, 'w') as file_object:
+    file_object.write("I love programming.")
+</code></pre>
+                    </div>
+                    <ul>
+                        <li class="fragment">
+                            <p>The second argument, 'w', tells Python that we want to open the file in write mode. You can open a file 198 Chapter 10 in read mode ('r'), write mode ('w'), append mode ('a'), or a mode that allows you to read and write to the file ('r+'). If you omit the mode argument, Python opens the file in read-only mode by default.</p>
+                        </li>
+                        <li class="fragment">
+                            <p><b>Python can only write strings to a text file. If you want to store numerical data in a text file, you’ll have to convert the data to string format first using the str() function.</b></p>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Writing Multiple Lines</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+filename = 'programming.txt'
+with open(filename, 'w') as file_object:
+    file_object.write("I love programming.")
+    file_object.write("I love creating new games.")
+
+I love programming.I love creating new games.   
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+filename = 'programming.txt'
+with open(filename, 'w') as file_object:
+    file_object.write("I love programming.\n")
+    file_object.write("I love creating new games.\n")
+
+I love programming.
+I love creating new games.
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Appending to a File</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+filename = 'programming.txt'
+message.py
+with open(filename, 'a') as file_object:
+    file_object.write("I also love finding meaning in large datasets.\n")
+    file_object.write("I love creating apps that can run in a browser.\n")
+
+I love programming.
+I love creating new games.
+I also love finding meaning in large datasets.
+I love creating apps that can run in a browser.
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Exceptions</h3>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+print("Give me two numbers, and I'll divide them.")
+print("Enter 'q' to quit.")
+while True:
+    first_number = input("\nFirst number: ")
+    if first_number == 'q':
+        break
+    second_number = input("Second number: ")
+    try:
+        answer = int(first_number) / int(second_number)
+    except ZeroDivisionError:
+        print("You can't divide by 0!")
+    else:
+        print(answer)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+Give me two numbers, and I'll divide them.
+Enter 'q' to quit.
+
+First number: 5
+Second number: 0
+You can't divide by 0!
+
+First number: 5
+Second number: 2
+2.5
+First number: q
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Handling the FileNotFoundError Exception</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+filename = 'alice.txt'
+with open(filename) as f_obj:
+    contents = f_obj.read() #Error
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+filename = 'alice.txt'
+try:
+    with open(filename) as f_obj:
+        contents = f_obj.read()
+except FileNotFoundError:
+    msg = "Sorry, the file " + filename + " does not exist."
+    print(msg)
+
+Sorry, the file alice.txt does not exist.
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+filename = 'alice.txt'
+try:
+    with open(filename) as f_obj:
+        contents = f_obj.read()
+except FileNotFoundError:
+    msg = "Sorry, the file " + filename + " does not exist."
+    print(msg)
+
+else:
+# Count the approximate number of words in the file.
+    words = contents.split()
+    num_words = len(words)
+    print("The file " + filename + " has about " + str(num_words) + " words.")
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Working with Multiple Files</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+def count_words(filename):
+    """Count the approximate number of words in a file."""
+    try:
+        with open(filename) as f_obj:
+            contents = f_obj.read()
+    except FileNotFoundError:
+        msg = "Sorry, the file " + filename + " does not exist."
+        print(msg)
+    else:
+    # Count approximate number of words in the file.
+    words = contents.split()
+    num_words = len(words)
+    print("The file " + filename + " has about " + str(num_words) +
+        " words.")
+
+filename = 'alice.txt'
+count_words(filename)
+
+filenames = ['alice.txt', 'siddhartha.txt', 'moby_dick.txt', 'little_women.txt']
+for filename in filenames:
+    count_words(filename)
+</code></pre>
+                    </div>
+                </section>
+            </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">9.3 Storing Data, Test</h2>
+                </section>
+                <section>
+                    <h3>JSON</h3>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import json
+
+numbers = [2, 3, 5, 7, 11, 13]
+filename = 'numbers.json'
+with open(filename, 'w') as f_obj:
+    json.dump(numbers, f_obj)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import json
+
+filename = 'numbers.json'
+with open(filename) as f_obj:
+    numbers = json.load(f_obj)
+print(numbers)
+
+[2, 3, 5, 7, 11, 13]
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Saving and Reading User-Generated Data</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import json
+
+username = input("What is your name? ")
+filename = 'username.json'
+with open(filename, 'w') as f_obj:
+    json.dump(username, f_obj)
+    print("We'll remember you when you come back, " + username + "!")
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import json
+filename = 'username.json'
+with open(filename) as f_obj:
+    username = json.load(f_obj)
+    print("Welcome back, " + username + "!")
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import json
+
+filename = 'username.json'
+try:
+    with open(filename) as f_obj:
+    username = json.load(f_obj)
+except FileNotFoundError:
+    username = input("What is your name? ")
+    with open(filename, 'w') as f_obj:
+        json.dump(username, f_obj)
+        print("We'll remember you when you come back, " + username + "!")
+else:
+    print("Welcome back, " + username + "!")
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+What is your name? Eric #First time
+We'll remember you when you come back, Eric!
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+Welcome back, Eric!
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Refactoring</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import json
+
+def get_stored_username():
+"""Get stored username if available."""
+    filename = 'username.json'
+    try:
+        with open(filename) as f_obj:
+            username = json.load(f_obj)
+    except FileNotFoundError:
+        return None
+    else:
+        return username
+
+def greet_user():
+"""Greet the user by name."""
+    username = get_stored_username()
+    if username:
+        print("Welcome back, " + username + "!")
+    else:
+        username = input("What is your name? ")
+        filename = 'username.json'
+        with open(filename, 'w') as f_obj:
+            json.dump(username, f_obj)
+            print("We'll remember you when you come back, " + username + "!")
+
+greet_user()
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+def get_stored_username():
+"""Get stored username if available."""
+    filename = 'username.json'
+    try:
+        with open(filename) as f_obj:
+            username = json.load(f_obj)
+    except FileNotFoundError:
+        return None
+    else:
+        return username
+
+def get_new_username():
+"""Prompt for a new username."""
+    username = input("What is your name? ")
+    filename = 'username.json'
+    with open(filename, 'w') as f_obj:
+        json.dump(username, f_obj)
+    return username
+
+def greet_user():
+"""Greet the user by name."""
+    username = get_stored_username()
+    if username:
+        print("Welcome back, " + username + "!")
+    else:
+        username = get_new_username()
+        print("We'll remember you when you come back, " + username + "!")
+greet_user()
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Testing your code</h3>
+                    <ul>
+                        <li class="fragment">
+                            <p>name_function.py</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+def get_formatted_name(first, last):
+    full_name = first + ' ' + last
+    return full_name.title()
+</code></pre>
+                    </div>
+                    <ul>
+                        <li class="fragment">
+                            <p>Unit Tests and Test Cases</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import unittest
+function.py from name_function import get_formatted_name
+
+class NamesTestCase(unittest.TestCase):
+    def test_first_last_name(self):
+        formatted_name = get_formatted_name('janis', 'joplin')
+        self.assertEqual(formatted_name, 'Janis Joplin')
+
+unittest.main()
+
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+def get_formatted_name(first, middle, last):
+    full_name = first + ' ' + middle + ' ' + last
+    return full_name.title()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+E
+======================================================================
+ERROR: test_first_last_name (__main__.NamesTestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test.py", line 6, in test_first_last_name
+    formatted_name = get_formatted_name('janis', 'joplin')
+TypeError: get_formatted_name() missing 1 required positional argument: 'last'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+def get_formatted_name(first, last, middle=''):
+    if middle:
+        full_name = first + ' ' + middle + ' ' + last
+    else:
+        full_name = first + ' ' + last
+    return full_name.title()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import unittest
+from name_function import get_formatted_name
+class NamesTestCase(unittest.TestCase):
+    def test_first_last_name(self):
+        formatted_name = get_formatted_name('janis', 'joplin')
+        self.assertEqual(formatted_name, 'Janis Joplin')
+    def test_first_last_middle_name(self):
+        formatted_name = get_formatted_name('wolfgang', 'mozart', 'amadeus')
+        self.assertEqual(formatted_name, 'Wolfgang Amadeus Mozart')
+
+unittest.main()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>A Variety of Asset Methods</h3>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+assertEqual(a, b) # Verify that a == b
+assertNotEqual(a, b) # Verify that a != b
+assertTrue(x) # Verify that x is True
+assertFalse(x) # Verify that x is False
+assertIn(item, list) # Verify that item is in list
+assertNotIn(item, list) # Verify that item is not in list
+</code></pre>
+                    </div>
+                </section>
+                <section data-background-image="bg.png">
+                    <h3>Testing a Class</h3>
+                    <div id='left'>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+class AnonymousSurvey():
+
+    def __init__(self, question):
+        self.question = question
+        self.responses = []
+
+    def show_question(self):
+        print(question)
+
+    def store_response(self, new_response):
+        self.responses.append(new_response)
+
+    def show_results(self):
+        print("Survey results:")
+        for response in responses:
+            print('- ' + response)
+</code></pre>
+                        </div>
+                    </div>
+                    <div id='right'>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+from survey import AnonymousSurvey
+
+question = "What language did you first learn to speak?"
+my_survey = AnonymousSurvey(question)
+
+my_survey.show_question()
+print("Enter 'q' at any time to quit.\n")
+while True:
+    response = input("Language: ")
+    if response == 'q':
+        break
+    my_survey.store_response(response)
+
+print("\nThank you to everyone who 
+        participated in the survey!")
+my_survey.show_results()
+</code></pre>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h3>Testing the AnonymousSurvey Class</h3>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import unittest
+from survey import AnonymousSurvey
+
+class TestAnonmyousSurvey(unittest.TestCase):
+
+    def test_store_single_response(self):
+        question = "What language did you first learn to speak?"
+        my_survey = AnonymousSurvey(question)
+        my_survey.store_response('English')
+        self.assertIn('English', my_survey.responses)
+
+unittest.main()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+OK
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import unittest
+from survey import AnonymousSurvey
+
+class TestAnonymousSurvey(unittest.TestCase):
+    def test_store_single_response(self):
+--snip--
+
+    def test_store_three_responses(self):
+        question = "What language did you first learn to speak?"
+        my_survey = AnonymousSurvey(question)
+        responses = ['English', 'Spanish', 'Mandarin']
+        for response in responses:
+            my_survey.store_response(response)
+        for response in responses:
+            self.assertIn(response, my_survey.responses)
+
+unittest.main()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>setUp()</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import unittest
+from survey import AnonymousSurvey
+class TestAnonymousSurvey(unittest.TestCase):
+
+def setUp(self):
+    question = "What language did you first learn to speak?"
+    self.my_survey = AnonymousSurvey(question)
+    self.responses = ['English', 'Spanish', 'Mandarin']
+
+def test_store_single_response(self):
+    self.my_survey.store_response(self.responses[0])
+    self.assertIn(self.responses[0], self.my_survey.responses)
+
+def test_store_three_responses(self):
+    for response in self.responses:
+        self.my_survey.store_response(response)
+    for response in self.responses:
+        self.assertIn(response, self.my_survey.responses)
+
+unittest.main()
+</code></pre>
+                    </div>
+                </section>
+            </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">9.4 Data Visualization </h2>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p><a href="https://matplotlib.org/">The matplotlib Gallery</a></p>
+                            <p>Plotting a Simple Line Graph</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import matplotlib.pyplot as plt
+
+squares = [1, 4, 9, 16, 25]
+plt.plot(squares)
+plt.show()
+</code></pre>
+                    </div>
+                    <div class="fragment"><img data-src="plt1.png" style="height: 300pt"></div>
+                </section>
+                <section>
+                    <p>Changing the Label Type and Graph Thickness (A Simple Way?)</p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import matplotlib.pyplot as plt
+squares = [1, 4, 9, 16, 25]
+plt.plot(squares, linewidth=5)
+
+# Set chart title and label axes.
+plt.title("Square Numbers", fontsize=24)
+plt.xlabel("Value", fontsize=14)
+plt.ylabel("Square of Value", fontsize=14)
+
+# Set size of tick labels.
+plt.tick_params(axis='both', labelsize=14)
+plt.show()
+</code></pre>
+                    </div>
+                    <div class="fragment"><img data-src="plt2.png" style="height: 250pt"></div>
+                </section>
+                <section>
+                    <p>Correcting the Plot</p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import matplotlib.pyplot as plt
+input_values = [1, 2, 3, 4, 5]
+squares = [1, 4, 9, 16, 25]
+plt.plot(input_values, squares, linewidth=5)
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <p>Plotting and Styling Individual Points with scatter()</p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import matplotlib.pyplot as plt
+
+plt.scatter(2, 4)
+plt.show()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import matplotlib.pyplot as plt
+plt.scatter(2, 4, s=200)
+
+# Set chart title and label axes.
+plt.title("Square Numbers", fontsize=24)
+plt.xlabel("Value", fontsize=14)
+plt.ylabel("Square of Value", fontsize=14)
+
+# Set size of tick labels.
+plt.tick_params(axis='both', which='major', labelsize=14)
+plt.show()
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import matplotlib.pyplot as plt
+
+x_values = [1, 2, 3, 4, 5]
+y_values = [1, 4, 9, 16, 25]
+plt.scatter(x_values, y_values, s=100)
+</code></pre>
+                    </div>
+                    <div class="fragment"><img data-src="plt3.png" style="height: 300pt"></div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import matplotlib.pyplot as plt
+
+x_values = list(range(1, 1001))
+y_values = [x**2 for x in x_values]
+plt.scatter(x_values, y_values, s=40)
+
+# Set the range for each axis.
+plt.axis([0, 1100, 0, 1100000])
+plt.show()
+</code></pre>
+                    </div>
+                    <div class="fragment"><img data-src="plt4.png" style="height: 300pt"></div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+plt.scatter(x_values, y_values, edgecolor='none', s=40)
+plt.scatter(x_values, y_values, c='red', edgecolor='none', s=40)
+plt.scatter(x_values, y_values, c=(0, 0, 0.8), edgecolor='none', s=40) #RGB
+</code></pre>
+                    </div>
+                    <div class="fragment"><img data-src="plt5.png" style="height: 300pt"></div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import matplotlib.pyplot as plt
+
+x_values = list(range(1001))
+y_values = [x**2 for x in x_values]
+plt.scatter(x_values, y_values, c=y_values, cmap=plt.cm.Blues,
+edgecolor='none', s=40)
+
+plt.show()
+</code></pre>
+                    </div>
+                    <div class="fragment"><img data-src="plt6.png" style="height: 300pt"></div>
+                </section>
+                <section>
+                    <p>Random Walks</p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+from random import choice # We have met random.
+
+class RandomWalk():
+
+    def __init__(self, num_points=5000):
+        self.num_points = num_points
+        self.x_values = [0]
+        self.y_values = [0]
+
+    def fill_walk(self):
+        while len(self.x_values) < self.num_points:
+            x_direction = choice([1, -1])
+            x_distance = choice([0, 1, 2, 3, 4])
+            x_step = x_direction * x_distance
+
+            y_direction = choice([1, -1])
+            y_distance = choice([0, 1, 2, 3, 4])
+            y_step = y_direction * y_distance
+
+            if x_step == 0 and y_step == 0:
+                continue
+
+            next_x = self.x_values[-1] + x_step
+            next_y = self.y_values[-1] + y_step
+
+            self.x_values.append(next_x)
+            self.y_values.append(next_y)
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import matplotlib.pyplot as plt
+from random_walk import RandomWalk
+
+rw = RandomWalk()
+rw.fill_walk()
+plt.scatter(rw.x_values, rw.y_values, s=1)
+plt.show()
+</code></pre>
+                    </div>
+                    <div class="fragment"><img data-src="plt7.png" style="height: 300pt"></div>
+                </section>
+                <section>
+                    <p>Generating Multiple Random Walks</p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import matplotlib.pyplot as plt
+from random_walk import RandomWalk
+
+while True:
+    rw = RandomWalk()
+    rw.fill_walk()
+    plt.scatter(rw.x_values, rw.y_values, s=1)
+    plt.show()
+
+    keep_running = input("Make another walk? (y/n): ")
+    if keep_running == 'n':
+        break
+</code></pre>
+                    </div>
+                    <p>Styling the Walk</p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+point_numbers = list(range(rw.num_points))
+plt.scatter(rw.x_values, rw.y_values, c=point_numbers, cmap=plt.cm.Blues,
+    edgecolor='none', s=15)
+plt.show()
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+    rw = RandomWalk(50000)
+
+    plt.axes().get_xaxis().set_visible(False)
+    plt.axes().get_yaxis().set_visible(False)
+
+</code></pre>
+                    </div>
+                    <div class="fragment"><img data-src="plt8.png" style="height: 300pt"></div>
+                </section>
+                <section>
+                    <h3>Rolling Dice with Pygal</h3>
+                    <ul>
+                        <li class="fragment">
+                            <p>Change file name D:\Anaconda\Scripts, pip.exe and pip-script.exe to <b>condapip.exe</b> and <b>condapip-script.exe</b></p>
+                        </li>
+                    </ul>
+                    <p class="fragment">In Anaconda Prompt</p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+condapip install Pygal
+conda list
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <p>die.py</p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+from random import randint
+class Die():
+
+    def __init__(self, num_sides=6):
+        self.num_sides = num_sides
+    def roll(self):
+        return randint(1, self.num_sides)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+from die import Die
+die = Die()
+results = []
+for roll_num in range(100):
+    result = die.roll()
+    results.append(result)
+print(results)
+input()
+
+[3, 4, 1, 3, 4, 3, 4, 6, 4, 4, 1, 3, 6, 5, 2, 6, 2, 5, 4, 3, 5, 4, 2, 4, 3, 1, 2, 6, 6, 2, 3, 2, 1, 6, 6, 4, 3, 2, 3, 5, 2, 4, 3, 6, 3, 2, 1, 3, 2, 1, 4, 6, 6, 3, 3, 3, 2, 2, 6, 3, 1, 6, 3, 4, 2, 6, 4, 6, 6, 3, 5, 5, 5, 5, 5, 3, 3, 1, 3, 2, 4, 2, 3, 1, 1, 4, 4, 2, 4, 2, 5, 2, 6, 2, 5, 6, 2, 2, 6, 5]
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Analyzing the Results</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+for roll_num in range(1000):
+    result = die.roll()
+    results.append(result)
+
+frequencies = []
+for value in range(1, die.num_sides+1):
+    frequency = results.count(value)
+    frequencies.append(frequency)
+print(frequencies)
+
+[177, 187, 185, 187, 185, 179]
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import pygal
+
+# Visualize the results.
+hist = pygal.Bar()
+hist.title = "Results of rolling one D6 1000 times."
+hist.x_labels = ['1', '2', '3', '4', '5', '6']
+hist.x_title = "Result"
+hist.y_title = "Frequency of Result"
+
+hist.add('D6', frequencies)
+hist.render_to_file('die_visual.svg')
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+from die import Die
+import pygal
+# Create a D6.
+die = Die()
+# Make some rolls, and store results in a list.
+results = []
+for roll_num in range(100):
+    result = die.roll()
+    results.append(result)
+print(results)
+for roll_num in range(1000):
+    result = die.roll()
+    results.append(result)
+
+frequencies = []
+for value in range(1, die.num_sides+1):
+    frequency = results.count(value)
+    frequencies.append(frequency)
+print(frequencies)
+
+
+# Visualize the results.
+hist = pygal.Bar()
+hist.title = "Results of rolling one D6 1000 times."
+hist.x_labels = ['1', '2', '3', '4', '5', '6']
+hist.x_title = "Result"
+hist.y_title = "Frequency of Result"
+
+hist.add('D6', frequencies)
+hist.render_to_file('die_visual.svg')
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment"><img data-src="die_visual.svg" style="height: 500pt"></div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import pygal
+from die import Die
+# Create two D6 dice.
+die_1 = Die()
+die_2 = Die()
+# Make some rolls, and store results in a list.
+results = []
+for roll_num in range(1000):
+    result = die_1.roll() + die_2.roll()
+    results.append(result)
+
+# Analyze the results.
+frequencies = []
+max_result = die_1.num_sides + die_2.num_sides
+
+for value in range(2, max_result+1):
+    frequency = results.count(value)
+    frequencies.append(frequency)
+# Visualize the results.
+hist = pygal.Bar()
+hist.title = "Results of rolling two D6 dice 1000 times."
+hist.x_labels = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+hist.x_title = "Result"
+hist.y_title = "Frequency of Result"
+hist.add('D6 + D6', frequencies)
+hist.render_to_file('dice_visual.svg')
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment"><img data-src="dice_visual.svg" style="height: 500pt"></div>
+                </section>
+            </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">9.5 Downloading Data (1)</h2>
+                </section>
+                <section>
+                    <p><b>.CSV</b></p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import csv
+
+filename = 'sitka_weather_07-2014.csv' 
+with open(filename) as f:
+    reader = csv.reader(f)
+    header_row = next(reader)
+    print(header_row)
+
+    for index, column_header in enumerate(header_row): #enumerate
+        print(index, column_header)
+
+['AKDT', 'Max TemperatureF', 'Mean TemperatureF', 'Min TemperatureF', 'Max Dew PointF', 'MeanDew PointF', 'Min DewpointF', 'Max Humidity', ' Mean Humidity', ' Min Humidity', ' Max Sea Level PressureIn', ' Mean Sea Level PressureIn', ' Min Sea Level PressureIn', ' Max VisibilityMiles', ' Mean VisibilityMiles', ' Min VisibilityMiles', ' Max Wind SpeedMPH', ' Mean Wind SpeedMPH', ' Max Gust SpeedMPH', 'PrecipitationIn', ' CloudCover', ' Events', ' WindDirDegrees']
+
+0 AKDT
+1 Max TemperatureF 2 Mean TemperatureF 3 Min TemperatureF 
+--snip--
+20 CloudCover
+21 Events
+22 WindDirDegrees
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <p>Extracting and Reading Data</p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+import csv
+
+filename = 'sitka_weather_07-2014.csv' 
+with open(filename) as f:
+    reader = csv.reader(f)
+    header_row = next(reader)
+    print(header_row)
+
+    for index, column_header in enumerate(header_row): #enumerate
+        print(index, column_header)
+
+    highs = []
+    for row in reader:
+        high = int(row[1])
+        highs.append(high)
+
+    print(highs)
+
+[64, 71, 64, 59, 69, 62, 61, 55, 57, 61, 57, 59, 57, 61, 64, 61, 59, 63, 60, 57, 69, 63, 62, 59, 57, 57, 61, 59, 61, 61, 66]
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+
+from matplotlib import pyplot as plt
+
+fig = plt.figure(dpi=128, figsize=(10, 6)) uplt.plot(highs, c='red')
+
+# Format plot.
+plt.title("Daily high temperatures, July 2014", fontsize=24) 
+plt.xlabel('', fontsize=16)
+plt.ylabel("Temperature (F)", fontsize=16)
+plt.tick_params(axis='both', which='major', labelsize=16)
+plt.show()
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <p>The datetime Module</p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+
+>>> from datetime import datetime
+>>> first_date = datetime.strptime('2014-7-1', '%Y-%m-%d') 
+>>> print(first_date)
+2014-07-01 00:00:00
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+
+%A Weekday name, such as Monday
+%B Month name, such as January
+%m Month, as a number (01 to 12)
+%d Day of the month, as a number (01 to 31) %Y Four-digit year, such as 2015
+%y Two-digit year, such as 15
+%H Hour, in 24-hour format (00 to 23)
+%I Hour, in 12-hour format (01 to 12)
+%p am or pm
+%M Minutes (00 to 59) %S Seconds (00 to 61)
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+
+import csv
+from datetime import datetime
+from matplotlib import pyplot as plt
+
+filename = 'sitka_weather_07-2014.csv'
+with open(filename) as f:
+    reader = csv.reader(f)
+    header_row = next(reader)
+    
+    dates, highs = [], [] 
+    for row in reader:
+        current_date = datetime.strptime(row[0], "%Y-%m-%d")
+        dates.append(current_date)
+        high = int(row[1])
+        highs.append(high)
+
+# Plot data.
+fig = plt.figure(dpi=128, figsize=(10, 6))
+plt.plot(dates, highs, c='red')
+
+# Format plot.
+plt.title("Daily high temperatures, July 2014", fontsize=24)
+plt.xlabel('', fontsize=16)
+<mark>fig.autofmt_xdate()</mark>
+plt.ylabel("Temperature (F)", fontsize=16) 
+plt.tick_params(axis='both', which='major', labelsize=16)
+
+plt.show()
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment"><img data-src="plt9.png" style="height: 400pt"></div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+
+import csv
+from datetime import datetime
+from matplotlib import pyplot as plt
+
+<mark>filename = 'death_valley_2014.csv'</mark>
+with open(filename) as f:
+    reader = csv.reader(f)
+    header_row = next(reader)
+    
+    <mark>dates, highs = [], [], []</mark> 
+    for row in reader:
+        current_date = datetime.strptime(row[0], "%Y-%m-%d")
+        dates.append(current_date)
+        high = int(row[1])
+        highs.append(high)
+
+        <mark>low = int(row[3])</mark>
+        <mark>lows.append(low)</mark>
+
+# Plot data.
+fig = plt.figure(dpi=128, figsize=(10, 6))
+<mark>plt.plot(dates, highs, c='red', alpha=0.5)</mark>
+<mark>plt.plot(dates, lows, c='blue', alpha=0.5)</mark>
+<mark>plt.fill_between(dates, highs, lows, facecolor='blue', alpha=0.1)</mark>
+
+# Format plot.
+plt.title("Daily high and low temperatures - 2014", fontsize=24)
+plt.xlabel('', fontsize=16)
+fig.autofmt_xdate()
+plt.ylabel("Temperature (F)", fontsize=16) 
+plt.tick_params(axis='both', which='major', labelsize=16)
+
+plt.show()
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+
+import csv
+from datetime import datetime
+from matplotlib import pyplot as plt
+
+filename = 'death_valley_2014.csv'
+with open(filename) as f:
+    reader = csv.reader(f)
+    header_row = next(reader)
+    dates, highs, lows = [], [], []
+    <mark>
+    for row in reader:
+        try:
+            current_date = datetime.strptime(row[0], "%Y-%m-%d")
+            high = int(row[1])
+            low = int(row[3])
+        except ValueError:
+            print(current_date, 'missing data')
+        else:
+            dates.append(current_date)
+            highs.append(high)
+            lows.append(low)</mark>
+    
+# Plot data.
+fig = plt.figure(dpi=128, figsize=(10, 6))
+plt.plot(dates, highs, c='red', alpha=0.5)
+plt.plot(dates, lows, c='blue', alpha=0.5)
+plt.fill_between(dates, highs, lows, facecolor='blue', alpha=0.1)
+
+# Format plot.
+plt.title("Daily high and low temperatures - 2014", fontsize=24)
+plt.xlabel('', fontsize=16)
+fig.autofmt_xdate()
+plt.ylabel("Temperature (F)", fontsize=16) 
+plt.tick_params(axis='both', which='major', labelsize=16)
+plt.show()
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment"><img data-src="plt10.png" style="height: 400pt"></div>
+                </section>
+            </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">9.6 Downloading Data (2)</h2>
+                </section>
+                <section>
+                    <p><b>.JSON</b></p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+
+import json
+
+filename = 'btc_close_2017.json'
+with open(filename) as f:
+    btc_data = json.load(f)  
+
+for btc_dict in btc_data:
+    date = btc_dict['date']
+    month = int(btc_dict['month'])
+    week = int(btc_dict['week'])
+    weekday = btc_dict['weekday']
+    close = int(float(btc_dict['close']))  
+    print("{} is month {} week {}, {}, the close price is {} RMB".format(
+        date, month, week, weekday, close))
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+2017-01-01 is month 1 week 52, Sunday, the close price is 6928 RMB
+2017-01-02 is month 1 week 1, Monday, the close price is 7070 RMB
+2017-01-03 is month 1 week 1, Tuesday, the close price is 7175 RMB
+2017-01-04 is month 1 week 1, Wednesday, the close price is 7835 RMB
+2017-01-05 is month 1 week 1, Thursday, the close price is 6928 RMB
+...
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+import json
+import pygal
+
+filename = 'btc_close_2017.json'
+with open(filename) as f:
+    btc_data = json.load(f)
+
+
+dates = []
+months = []
+weeks = []
+weekdays = []
+close = []
+
+for btc_dict in btc_data:
+    dates.append(btc_dict['date'])
+    months.append(int(btc_dict['month']))
+    weeks.append(int(btc_dict['week']))
+    weekdays.append(btc_dict['weekday'])
+    close.append(int(float(btc_dict['close'])))
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+
+
+line_chart = pygal.Line(x_label_rotation=20, show_minor_x_labels=False) 
+line_chart.title = '收盘价（¥）'
+line_chart.x_labels = dates
+N = 20  # x轴坐标每隔20天显示一次
+line_chart.x_labels_major = dates[::N]  # ②
+line_chart.add('收盘价', close)
+line_chart.render_to_file('收盘价折线图（¥）.svg')
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment"><img data-src="close_price.svg" style="height: 400pt"></div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+import json
+import math
+
+filename = 'btc_close_2017.json'
+with open(filename) as f:
+    btc_data = json.load(f)
+
+
+dates = []
+months = []
+weeks = []
+weekdays = []
+close = []
+
+for btc_dict in btc_data:
+    dates.append(btc_dict['date'])
+    months.append(int(btc_dict['month']))
+    weeks.append(int(btc_dict['week']))
+    weekdays.append(btc_dict['weekday'])
+    close.append(int(float(btc_dict['close'])))
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+
+
+line_chart = pygal.Line(x_label_rotation=20, show_minor_x_labels=False)
+line_chart.title = '收盘价对数变换（¥）'
+line_chart.x_labels = dates
+N = 20  # x轴坐标每隔20天显示一次
+line_chart.x_labels_major = dates[::N]
+close_log = [math.log10(xx) for xx in close] 
+line_chart.add('log收盘价', close_log)
+line_chart.render_to_file('收盘价对数变换折线图（¥）.svg')
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment"><img data-src="close_price_log.svg" style="height: 400pt"></div>
+                </section>
+                <section>
+                    <p><b>itertools</b></p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+import itertools
+
+nums = itertools.count(0,2)
+for i in nums:
+    if i > 6:
+        break
+    print(i, end = " ")
+
+0 2 4 6 
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+import itertools
+
+cycle_strings = itertools.cycle('ABC')
+i = 1
+for string in cycle_strings:
+    if i == 7:
+        break
+    print(i, string)
+    i += 1
+
+1 A
+2 B
+3 C
+4 A
+5 B
+6 C
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>We have learned <b>generator</b>.(next(), for)</p>
+                        </li>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+g = (x * x for x in range(10))
+
+def fib(max):
+    n, a, b = 0, 0, 1
+    while n < max:
+        yield b
+        a, b = b, a + b
+        n = n + 1
+    return 'done'
+</code></pre>
+                        </div>
+                        <li class="fragment">
+                            <p><b>Iterator</b> is a more general concept: any object whose class has a next method (__next__ in Python 3) and an __iter__ method.</p>
+                        </li>
+                        <li class="fragment">
+                            <p>Every generator is an iterator, but not vice versa.</p>
+                        </li>
+                        <li class="fragment">
+                            <p><b>An iterator can only be traversed once.</b></p>
+                        </li>
+                        <li class="fragment">
+                            <p>Iterator and iterable are two different concepts</p>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+import itertools
+
+for item in itertools.repeat('hello world', 3):
+    print(item)
+
+hello world
+hello world
+hello world
+</code></pre>
+                    </div>
+                    <p class="fragment"><b>groupby()</b></p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+from itertools import groupby
+
+for key, value_iter in groupby('aaabbbaaccd'):
+    print(key, ':', list(value_iter))
+
+a : ['a', 'a', 'a']
+b : ['b', 'b', 'b']
+a : ['a', 'a']
+c : ['c', 'c']
+d : ['d']
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+from itertools import groupby
+
+data = ['a', 'bb', 'ccc', 'dd', 'eee', 'f']
+for key, value_iter in groupby(data, len):  
+    print(key, ':', list(value_iter))
+
+1 : ['a']
+2 : ['bb']
+3 : ['ccc']
+2 : ['dd']
+3 : ['eee']
+1 : ['f']
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+from itertools import groupby
+
+data = ['a', 'bb', 'cc', 'ddd', 'eee', 'f']
+for key, value_iter in groupby(data, len):  
+    print(key, ':', list(value_iter))
+
+1 : ['a']
+2 : ['bb', 'cc']
+3 : ['ddd', 'eee']
+1 : ['f']
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <p><b>zip()</b></p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+>>> a = [1,2,3]
+>>> b = [4,5,6]
+>>> c = [4,5,6,7,8]
+>>> zipped = zip(a,b)
+>>> zipped
+<zip object at 0x02B01B48> #返回的是一个对象(iterator)
+>>> list(zipped)
+[(1, 4), (2, 5), (3, 6)] #使用list()函数转换为列表
+>>> list(zip(a,c))
+[(1, 4), (2, 5), (3, 6)]
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+>>> a = [1,2,3]
+>>> b = [4,5,6]
+>>> c = [4,5,6,7,8]
+>>> zipped = zip(a,b)
+>>> list(zip(*zipped)) #解压也使用list进行转换
+[(1, 2, 3), (4, 5, 6)]
+>>> zipped = zip(a,b)
+>>> x,y,z = zip(*zipped))
+>>> print(x)
+(1,2,3)
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+from itertools import groupby
+
+def draw_line(x_data, y_data, title, y_legend):
+    xy_map = []
+    for x, y in groupby(sorted(zip(x_data, y_data)), key=lambda _: _[0]):  
+        y_list = [v for _, v in y]
+        xy_map.append([x, sum(y_list) / len(y_list)])  
+    x_unique, y_mean = list(zip(*xy_map)) # [*zip(*xy_map)] 
+    line_chart = pygal.Line()
+    line_chart.title = title
+    line_chart.x_labels = x_unique
+    line_chart.add(y_legend, y_mean)
+    line_chart.render_to_file(title + '.svg')
+    return line_chart
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+idx_month = dates.index('2017-12-01') #list.index()
+line_chart_month = draw_line(
+    months[:idx_month], close[:idx_month], '收盘价月日均值（¥）', '月日均值')
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment"><img data-src="close_price_avg.svg" style="height: 400pt"></div>
+                </section>
+                <section>
+                    <p>Working with APIs</p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable data-noescape>
+import requests
+
+url = "https://www.sojson.com/open/api/weather/json.shtml?city=上海"
+r = requests.get(url)
+print(r.status_code)
+
+response_dict = r.json()
+f = response_dict['data']
+ff = f['forecast']
+ff_today = ff[0]
+ff_1 = ff[1]
+ff_2 = ff[2]
+ff_3 = ff[3]
+ff_4 = ff[4] 
+
+def show(day):
+    for x in day:
+        print(x +': ' + str(day[x]))
+    print('\n')
+    
+show(ff_today)
+show(ff_1)
+show(ff_2)
+show(ff_3)
+show(ff_4)
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li>
+                            <p>Python Crash Couse (Chapters we do not cover: Chapter 12 - 14, 17 - 20)</p>
+                            <ul>
+                                <li>
+                                    <p>Chapter 12 -14: Alien Invasion</p>
+                                </li>
+                                <li>
+                                    <p>Chapter 17: API (We talked little about it.)</p>
+                                </li>
+                                <li>
+                                    <p>Chapter 18 - 20: Django</p>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>Python for Everybody (Chapters we do not cover: Chapter 11 - 13, 15 - 16)</p>
+                            <ul>
+                                <li>
+                                    <p>Chapter 11: Regualer Expressions</p>
+                                </li>
+                                <li>
+                                    <p>Chapter 12: Networked Programs 12.4 - 12.8 (urlib, BeautifulSoup)</p>
+                                </li>
+                                <li>
+                                    <p>Chapter 13: Using Web Services (XML, JSON, API)</p>
+                                </li>
+                                <li>
+                                    <p>Chapter 15: Databases and SQL</p>
+                                </li>
+                                <li>
+                                    <p>Chapter 16: Visualizing data (Network, Word Cloud)</p>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </section>
+            <section>
+                <section data-background="#2c3e50" style="color: white; text-align: left;">
+                    <h2 style="color: white">Summary</h2>
+                    <ul>
+                        <li>OOP</li>
+                        <ul>
+                            <li>Reading: Python Crash Course, Chapter 10, 11</li>
+                        </ul>
+                    </ul>
+                </section>
+            </section>
+        </div>
+    </div>
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+    <script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 960,
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        // Bounds for smallest/largest possible scale to apply to content
+        minScale: 0.2,
+        maxScale: 1.5,
+
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Set default timing of 2 minutes per slide
+        defaultTiming: 120,
+
+        // Display the page number of the current slide
+        slideNumber: true,
+
+        // Push each slide change to the browser history
+        history: false,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autolaying embedded media (video/audio/iframe)
+        // - null: Media will only autoplay if data-autoplay is present
+        // - true: All media will autoplay, regardless of individual setting
+        // - false: No media will autoplay, regardless of individual setting
+        autoPlayMedia: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: Reveal.navigateNext,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // Hides the address bar on mobile devices
+        hideAddressBar: true,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Transition speed
+        transitionSpeed: 'default', // default/fast/slow
+
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'fade', // none/fade/slide/convex/concave/zoom
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Parallax background image
+        parallaxBackgroundImage: '', // e.g. "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'"
+
+        // Parallax background size
+        parallaxBackgroundSize: '', // CSS syntax, e.g. "2100px 900px"
+
+        // Number of pixels to move the parallax background per slide
+        // - Calculated automatically unless specified
+        // - Set to 0 to disable movement along an axis
+        parallaxBackgroundHorizontal: null,
+        parallaxBackgroundVertical: null,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        dependencies: [
+            { src: 'plugin/markdown/marked.js' },
+            { src: 'plugin/markdown/markdown.js' },
+            { src: 'plugin/notes/notes.js', async: true },
+            { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+            // Zoom in and out with Alt+click
+            { src: 'plugin/zoom-js/zoom.js', async: true },
+
+            // Speaker notes
+            { src: 'plugin/notes/notes.js', async: true },
+
+            // MathJax
+            { src: 'plugin/math/math.js', async: true },
+            { src: 'plugin/line-numbers/line-numbers.js' }
+        ]
+    });
+    </script>
+</body>
+
+</html>
