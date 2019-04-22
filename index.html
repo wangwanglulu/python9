@@ -4,12 +4,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>reveal.js</title>
+    <title>Lecture 9</title>
     <link rel="stylesheet" href="css/reveal.css">
     <link rel="stylesheet" href="css/theme/white.css">
     <link rel="stylesheet" href="css/theme/custom.css">
     <!-- Theme used for syntax highlighting of code -->
-    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <link rel="stylesheet" href="lib/css/googlecode.css">
     <!-- Printing and PDF exports -->
     <script>
     var link = document.createElement('link');
@@ -25,1097 +25,679 @@
         <div class="slides">
             <section data-background-video="bgm.mp4" data-background-video-loop data-background-video-muted style="text-align: left;">
                 <h2 style="color: white">Python Programming</h2>
-                <h5 style="color: white">Lecture 9 Advanced OOP, File, Test</h5>
+                <h5 style="color: white">Lecture 9 Advanced OOP (1)</h5>
             </section>
             <section>
                 <section data-background="#2980b9" style="color: white">
-                    <h2 style="color: white">9.1 Advanced OOP (1)</h2>
+                    <h2 style="color: white">9.1 Inheritance</h2>
                 </section>
                 <section>
                     <ul>
                         <li class="fragment">
-                            <p>Classes can intercept Python Operators</p>
+                            <p>You don't always have to start from scratch when writing a class. If the class you're writing is a specialized version of another class you wrote, you can use <b>inheritance</b>.</p>
+                        </li>
+                        <li class="fragment">
+                            <p>When one class inherits from another, it automatically takes on all the attributes and methods of the first class.</p>
+                        </li>
+                        <li class="fragment">
+                            <p>The original class is called the parent class, and the new class is the child class. The child class inherits every attribute and method from its parent class but is also free to define new attributes and methods of its own.</p>
                         </li>
                     </ul>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-class Dog():
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-    def __str__(self):
-        return "Dog's name is %s." % self.name  
-
-
-my_dog = Dog('willie', 6)
-print(dir(my_dog))
-#output
-['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__',
- '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', 
- '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__',
-  '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 
-  'age', 'name']
-</code></pre>
-                    </div>
                 </section>
                 <section>
-                    <ul>
-                        <li class="fragment">
-                            <p><b>__str__</b></p>
-                        </li>
-                    </ul>
+                    <div class="fragment"><img data-src="car.png" style="height: 400pt"></div>
+                </section>
+                <section>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-class Dog():
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-
-my_dog = Dog('willie', 6)
-print(my_dog)
-#output
-<__main__.Dog object at 0x053A3750>
+class Car():
+    def __init__(self, make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+        self.odometer_reading = 0
+    def get_descriptive_name(self):
+        long_name = str(self.year) + ' ' 
+        + self.make + ' ' + self.model
+        return long_name.title()
 </code></pre>
                     </div>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-class Dog():
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-    def __str__(self):
-        return "Dog's name is %s." % self.name  
-
-my_dog = Dog('willie', 6)
-print(my_dog)
-#output
-Dog's name is willie.
+class ElectricCar(Car):
+    def __init__(self, make, model, year):
+        super().__init__(make, model, year)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+my_tesla = ElectricCar('tesla', 'model s', 2016)
+print(my_tesla.get_descriptive_name())
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+2016 Tesla Model S
 </code></pre>
                     </div>
                 </section>
                 <section>
                     <ul>
                         <li class="fragment">
-                            <p><b>__add__</b></p>
+                            <p>Defining attributes and methods for the child class</p>
                         </li>
                     </ul>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-class Dog():
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-
-my_dog = Dog('willie', 6)
-
-print(my_dog.name +' your_dog')
-#output
-willie your_dog
+class ElectricCar(Car):
+    def __init__(self, make, model, year):
+        super().__init__(make, model, year)
+        self.battery_size = 70
+    def describe_battery(self):
+        print(str(self.battery_size) + "-kWh battery.")
 </code></pre>
                     </div>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-class Dog():
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-    def __str__(self):
-        return "Dog's name is %s." % self.name 
-    def __add__(self, other):
-        return Dog(self.name + other, age = 6)
-my_dog = Dog('willie', 6)
-
-x = my_dog +' your_dog' #It creates a new instance.
-print(x)
-#output
-Dog's name is willie your_dog.
+my_tesla = ElectricCar('tesla', 'model s', 2016)
+print(my_tesla.get_descriptive_name())
+my_tesla.describe_battery()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+2016 Tesla Model S
+70-kWh battery.
 </code></pre>
                     </div>
                 </section>
                 <section>
                     <ul>
                         <li class="fragment">
-                            <p><b>__dict__</b></p>
+                            <p>Overriding methods from the parent class</p>
                         </li>
                     </ul>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-class Dog():
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
+class ElectricCar(Car):
+    def __init__(self, make, model, year):
+        super().__init__(make, model, year)
+        self.battery_size = 70
+    def describe_battery(self):
+        print("This car has a " + str(self.battery_size) + "-kWh battery.")
 
-my_dog = Dog('willie', 6)
-print(my_dog.__dict__) # attributes of instances
-print(Dog.__dict__.keys()) # attributes of classes
-#output
-{'name': 'willie', 'age': 6} 
-dict_keys(['__module__', '__init__', '__dict__', '__weakref__', '__doc__']) # instances share
+    def get_descriptive_name(self):
+        long_name = str(self.year) + ' ' 
+        + self.make
+        return long_name.title()
 </code></pre>
                     </div>
+                    <ul>
+                        <li class="fragment">
+                            <p>Now if someone tries to call get_descriptive_name() with an electric car, Python will ignore the method get_descriptive_name() in Car and run this code instead.</p>
+                        </li>
+                    </ul>
                 </section>
                 <section>
                     <ul>
                         <li class="fragment">
-                            <p><b>__doc__, __name__, __module__, __bases__</b></p>
+                            <p>Instances as attributes</p>
                         </li>
                     </ul>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-class Dog():
-    "This is about dog class."
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
+class Battery():
+    def __init__(self, battery_size=70):
+        self.battery_size = battery_size
+    def describe_battery(self):
+        print("This car has a " + str(self.battery_size) + "-kWh battery.")
 
-print(Dog.__doc__)
-print(Dog.__name__)
-print(Dog.__module__)
-print(Dog.__bases__)
-#output
-This is about dog class.
-Dog
-__main__
-(&lt;class 'object'&gt;,)
+class ElectricCar(Car):
+    def __init__(self, make, model, year):
+        super().__init__(make, model, year)
+        self.battery = Battery()
 </code></pre>
                     </div>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-class Dog():
-    "This is about dog class."
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-class Husky(Dog):
-    pass
-
-print(Husky.__bases__)
-#output
-(&lt;class '__main__.Dog'&gt;,)
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <ul>
-                        <li class="fragment">
-                            <p>Multiple Inheritance and __mro__</p>
-                        </li>
-                    </ul>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-class Animal():
-    def __init__(self, name):
-        self.name = name
-
-class Dog():
-    def __init__(self, name):
-        super().__init__(name)
-
-class Husky(Dog, Animal):
-    def __init__(self, name):
-        super().__init__(name)      
-
-print(Husky.__mro__)
-#output
-(&lt;class '__main__.Husky'&gt;, &lt;class '__main__.Dog'&gt;, 
-&lt;class '__main__.Animal'&gt;, &lt;class 'object'&gt;)
+my_tesla = ElectricCar('tesla', 'model s', 2016)
+my_tesla.battery.describe_battery()
 </code></pre>
                     </div>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-class Animal(): 
-    pass
-class Dog(Animal):
-    pass
-class Cat(Animal):
-    pass
-class X(Dog, Cat):
-    pass      
-
-print(X.__mro__)
-#output
-(&lt;class '__main__.Husky'&gt;, &lt;class '__main__.Dog'&gt;, &lt;class '__main__.Cat'&gt;,
- &lt;class '__main__.Animal'&gt;, &lt;class 'object'&gt;)
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-class Animal():
-    pass
-class Dog(Animal):
-    pass
-class Cat(Animal):
-    pass
-class Husky(Dog):
-    pass
-class Persian(Cat):
-    pass
-class X(Husky, Persian):
-    pass      
-
-print(X.__mro__)
-#output
-(&lt;class '__main__.X'&gt;, &lt;class '__main__.Husky'&gt;, &lt;class '__main__.Dog'&gt;, 
-&lt;class '__main__.Persian'&gt;, &lt;class '__main__.Cat'&gt;, &lt;class '__main__.Animal'&gt;, 
-&lt;class 'object'&gt;)
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-class Animal():
-    pass
-class Dog(Animal):
-    pass
-class Cat(Animal):
-    pass
-class Husky(Dog, Cat):
-    pass
-class Persian(Dog, Cat):
-    pass
-class X(Husky, Persian):
-    pass      
-
-print(X.__mro__)
-#output
-(&lt;class '__main__.X'&gt;, &lt;class '__main__.Husky'&gt;, &lt;class '__main__.Persian'&gt;,
- &lt;class '__main__.Dog'&gt;, &lt;class '__main__.Cat'&gt;, &lt;class '__main__.Animal'&gt;, 
-&lt;class 'object'&gt;)
-</code></pre>
-                    </div>
-                </section>
-                <section data-background-image="bg.png">
-                    <h3>Topological Sorting (C3)</h3>
-                    <div id='left'>
-                        <div class="fragment"><img data-src="1.png" style="height: 400pt"></div>
-                    </div>
-                    <div id='right'>
-                        <div class="fragment"><img data-src="2.png" style="height: 400pt"></div>
-                    </div>
-                </section>
-                <section>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-class Animal():
-    pass
-class Dog(Animal):
-    pass
-class Cat(Animal):
-    pass
-class Husky(Dog, Cat):
-    pass
-class Persian(Cat, Dog):
-    pass
-class X(Husky, Persian):
-    pass      
-
-print(X.__mro__)
-# Error
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-class Animal():
-    pass
-class Dog(Animal):
-    pass
-class X(Animal, Dog):
-    pass
-print(X.__mro__)
-# Error
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <p><b>如果你一定要秀一波操作</b></p>
-                    <h3>MixIn Inheritance</h3>
-                    <div class="fragment"><img data-src="3.png" style="height: 300pt"></div>
-                </section>
-                <section>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-class Animal():
-    pass
-
-class EatMixIn():
-    def eat(self):
-        print(self.name +" is eating.")
-class RunMixIn():
-    def run(self):
-        print(self.name +" is running.") 
-
-class Dog(Animal):
-    def __init__(self, name):
-        self.name = name
-
-class Cat(Animal):
-    def __init__(self, name):
-        self.name = name
-
-class Husky(Dog, EatMixIn, RunMixIn):
-    def __init__(self, name):
-        super().__init__(name)
-
-class Persian(Cat, EatMixIn, RunMixIn):
-    def __init__(self, name):
-        super().__init__(name)
-
-x = Husky("Willie")
-y = Persian("Coco")
-x.eat() # Willie is eating.
-x.run() # Willie is running.
-y.eat() # Coco is eating.
-y.run() # Coco is running.   
+This car has a 70-kWh battery.
 </code></pre>
                     </div>
                 </section>
             </section>
             <section>
                 <section data-background="#2980b9" style="color: white">
-                    <h2 style="color: white">9.2 File</h2>
+                    <h2 style="color: white">9.2 Importing Classes</h2>
                 </section>
                 <section>
-                    <h3>Reading from a File</h3>
                     <ul>
                         <li class="fragment">
-                            <p>pi_digits.txt</p>
+                            <p>Importing a Single Class</p>
+                        </li>
+                        <li class="fragment">
+                            <p>Save your Car class in a python file: car.py</p>
                         </li>
                     </ul>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-3.1415926535
-8979323846
-2643383279
+from car import Car
+
+my_new_car = Car('audi', 'a4', 2016)
+print(my_new_car.get_descriptive_name())
+
+my_new_car.odometer_reading = 23
+my_new_car.read_odometer()
 </code></pre>
                     </div>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-with open('pi_digits.txt') as file_object:
-    contents = file_object.read() # string
-    print(contents.rstrip())
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <h3>File Path</h3>
-                    <ul>
-                        <li class="fragment">
-                            <p>relative path</p>
-                        </li>
-                    </ul>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-with open('text_files/filename.txt') as file_object: # Linux or OSX
-with open('text_files\filename.txt') as file_object: # Windows
-</code></pre>
-                    </div>
-                    <ul>
-                        <li class="fragment">
-                            <p>absolute path</p>
-                        </li>
-                    </ul>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-file_path = '/home/ehmatthes/other_files/text_files/filename.txt'
-with open(file_path) as file_object: # Linux or OSX
-file_path = 'C:\Users\ehmatthes\other_files\text_files\filename.txt'
-with open(file_path) as file_object: # Windows
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <h3>Reading Line by Line</h3>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-filename = 'pi_digits.txt'
-with open(filename) as file_object:
-    for line in file_object:
-        print(line)
-
-3.1415926535
-
-8979323846
-
-2643383279
-
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-filename = 'pi_digits.txt'
-with open(filename) as file_object:
-    for line in file_object:
-        print(line.rstrip())
-
-3.1415926535
-8979323846
-2643383279
+2016 Audi A4
+This car has 23 miles on it.
 </code></pre>
                     </div>
                 </section>
                 <section>
                     <ul>
                         <li class="fragment">
-                            <p>Making a List of Lines from a File</p>
+                            <p>Storing Multiple Classes in a Module</p>
+                        </li>
+                        <li class="fragment">
+                            <p>You can store as many classes as you need in a single module, although each class in a module should be related somehow. The classes <b>Battery </b>and <b>ElectricCar</b> both help represent cars, so let's add them to the module <b>car.py</b></p>
                         </li>
                     </ul>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-filename = 'pi_digits.txt'
+from car import ElectricCar
 
-with open(filename) as file_object:
-    lines = file_object.readlines() #List
+my_tesla = ElectricCar('tesla', 'model s', 2016)
 
-for line in lines:
-    print(line.rstrip())
-</code></pre>
-                    </div>
-                    <ul>
-                        <li class="fragment">
-                            <p>Working with a File’s Contents</p>
-                        </li>
-                    </ul>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-filename = 'pi_digits.txt'
-
-with open(filename) as file_object:
-    lines = file_object.readlines() # list read() works here
-
-pi_string = ''
-for line in lines:
-    pi_string += line.rstrip()
-print(pi_string)
-print(len(pi_string))
-
-3.141592653589793238462643383279 # string
-32
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <h3>Writing to a File</h3>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-filename = 'programming.txt'
-
-with open(filename, 'w') as file_object:
-    file_object.write("I love programming.")
-</code></pre>
-                    </div>
-                    <ul>
-                        <li class="fragment">
-                            <p>The second argument, 'w', tells Python that we want to open the file in write mode. You can open a file 198 Chapter 10 in read mode ('r'), write mode ('w'), append mode ('a'), or a mode that allows you to read and write to the file ('r+'). If you omit the mode argument, Python opens the file in read-only mode by default.</p>
-                        </li>
-                        <li class="fragment">
-                            <p><b>Python can only write strings to a text file. If you want to store numerical data in a text file, you’ll have to convert the data to string format first using the str() function.</b></p>
-                        </li>
-                    </ul>
-                </section>
-                <section>
-                    <ul>
-                        <li class="fragment">
-                            <p>Writing Multiple Lines</p>
-                        </li>
-                    </ul>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-filename = 'programming.txt'
-with open(filename, 'w') as file_object:
-    file_object.write("I love programming.")
-    file_object.write("I love creating new games.")
-
-I love programming.I love creating new games.   
+print(my_tesla.get_descriptive_name())
+my_tesla.battery.describe_battery()
+my_tesla.battery.get_range()
 </code></pre>
                     </div>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-filename = 'programming.txt'
-with open(filename, 'w') as file_object:
-    file_object.write("I love programming.\n")
-    file_object.write("I love creating new games.\n")
-
-I love programming.
-I love creating new games.
+2016 Tesla Model S
+This car has a 70-kWh battery.
+This car can go approximately 240 miles on a full charge.
 </code></pre>
                     </div>
                 </section>
                 <section>
                     <ul>
                         <li class="fragment">
-                            <p>Appending to a File</p>
+                            <p>Importing Multiple Classes from a Module</p>
                         </li>
                     </ul>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-filename = 'programming.txt'
-message.py
-with open(filename, 'a') as file_object:
-    file_object.write("I also love finding meaning in large datasets.\n")
-    file_object.write("I love creating apps that can run in a browser.\n")
+from car import Car, ElectricCar
 
-I love programming.
-I love creating new games.
-I also love finding meaning in large datasets.
-I love creating apps that can run in a browser.
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <h3>Exceptions</h3>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-print("Give me two numbers, and I'll divide them.")
-print("Enter 'q' to quit.")
-while True:
-    first_number = input("\nFirst number: ")
-    if first_number == 'q':
-        break
-    second_number = input("Second number: ")
-    try:
-        answer = int(first_number) / int(second_number)
-    except ZeroDivisionError:
-        print("You can't divide by 0!")
-    else:
-        print(answer)
+my_beetle = Car('volkswagen', 'beetle', 2016)
+    print(my_beetle.get_descriptive_name())
+
+my_tesla = ElectricCar('tesla', 'roadster', 2016)
+    print(my_tesla.get_descriptive_name())
 </code></pre>
                     </div>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-Give me two numbers, and I'll divide them.
-Enter 'q' to quit.
-
-First number: 5
-Second number: 0
-You can't divide by 0!
-
-First number: 5
-Second number: 2
-2.5
-First number: q
+2016 Volkswagen Beetle
+2016 Tesla Roadster
 </code></pre>
                     </div>
                 </section>
                 <section>
                     <ul>
                         <li class="fragment">
-                            <p>Handling the FileNotFoundError Exception</p>
+                            <p>Importing a Module into a Module</p>
                         </li>
-                    </ul>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-filename = 'alice.txt'
-with open(filename) as f_obj:
-    contents = f_obj.read() #Error
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-filename = 'alice.txt'
-try:
-    with open(filename) as f_obj:
-        contents = f_obj.read()
-except FileNotFoundError:
-    msg = "Sorry, the file " + filename + " does not exist."
-    print(msg)
-
-Sorry, the file alice.txt does not exist.
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-filename = 'alice.txt'
-try:
-    with open(filename) as f_obj:
-        contents = f_obj.read()
-except FileNotFoundError:
-    msg = "Sorry, the file " + filename + " does not exist."
-    print(msg)
-
-else:
-# Count the approximate number of words in the file.
-    words = contents.split()
-    num_words = len(words)
-    print("The file " + filename + " has about " + str(num_words) + " words.")
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <ul>
                         <li class="fragment">
-                            <p>Working with Multiple Files</p>
+                            <p>car.py</p>
                         </li>
-                    </ul>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-def count_words(filename):
-    """Count the approximate number of words in a file."""
-    try:
-        with open(filename) as f_obj:
-            contents = f_obj.read()
-    except FileNotFoundError:
-        msg = "Sorry, the file " + filename + " does not exist."
-        print(msg)
-    else:
-    # Count approximate number of words in the file.
-    words = contents.split()
-    num_words = len(words)
-    print("The file " + filename + " has about " + str(num_words) +
-        " words.")
-
-filename = 'alice.txt'
-count_words(filename)
-
-filenames = ['alice.txt', 'siddhartha.txt', 'moby_dick.txt', 'little_women.txt']
-for filename in filenames:
-    count_words(filename)
-</code></pre>
-                    </div>
-                </section>
-            </section>
-            <section>
-                <section data-background="#2980b9" style="color: white">
-                    <h2 style="color: white">9.3 Storing Data, Test</h2>
-                </section>
-                <section>
-                    <h3>JSON</h3>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-import json
-
-numbers = [2, 3, 5, 7, 11, 13]
-filename = 'numbers.json'
-with open(filename, 'w') as f_obj:
-    json.dump(numbers, f_obj)
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-import json
-
-filename = 'numbers.json'
-with open(filename) as f_obj:
-    numbers = json.load(f_obj)
-print(numbers)
-
-[2, 3, 5, 7, 11, 13]
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <ul>
-                        <li class="fragment">
-                            <p>Saving and Reading User-Generated Data</p>
-                        </li>
-                    </ul>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-import json
-
-username = input("What is your name? ")
-filename = 'username.json'
-with open(filename, 'w') as f_obj:
-    json.dump(username, f_obj)
-    print("We'll remember you when you come back, " + username + "!")
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-import json
-filename = 'username.json'
-with open(filename) as f_obj:
-    username = json.load(f_obj)
-    print("Welcome back, " + username + "!")
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-import json
-
-filename = 'username.json'
-try:
-    with open(filename) as f_obj:
-    username = json.load(f_obj)
-except FileNotFoundError:
-    username = input("What is your name? ")
-    with open(filename, 'w') as f_obj:
-        json.dump(username, f_obj)
-        print("We'll remember you when you come back, " + username + "!")
-else:
-    print("Welcome back, " + username + "!")
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-What is your name? Eric #First time
-We'll remember you when you come back, Eric!
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-Welcome back, Eric!
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <ul>
-                        <li class="fragment">
-                            <p>Refactoring</p>
-                        </li>
-                    </ul>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-import json
-
-def get_stored_username():
-"""Get stored username if available."""
-    filename = 'username.json'
-    try:
-        with open(filename) as f_obj:
-            username = json.load(f_obj)
-    except FileNotFoundError:
-        return None
-    else:
-        return username
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-def greet_user():
-"""Greet the user by name."""
-    username = get_stored_username()
-    if username:
-        print("Welcome back, " + username + "!")
-    else:
-        username = input("What is your name? ")
-        filename = 'username.json'
-        with open(filename, 'w') as f_obj:
-            json.dump(username, f_obj)
-            print("We'll remember you when you come back, " + username + "!")
-
-greet_user()
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-def get_stored_username():
-"""Get stored username if available."""
-    filename = 'username.json'
-    try:
-        with open(filename) as f_obj:
-            username = json.load(f_obj)
-    except FileNotFoundError:
-        return None
-    else:
-        return username
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-def get_new_username():
-"""Prompt for a new username."""
-    username = input("What is your name? ")
-    filename = 'username.json'
-    with open(filename, 'w') as f_obj:
-        json.dump(username, f_obj)
-    return username
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-def greet_user():
-"""Greet the user by name."""
-    username = get_stored_username()
-    if username:
-        print("Welcome back, " + username + "!")
-    else:
-        username = get_new_username()
-        print("We'll remember you when you come back, " + username + "!")
-greet_user()
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <h3>Testing your code</h3>
-                    <ul>
-                        <li class="fragment">
-                            <p>name_function.py</p>
-                        </li>
-                    </ul>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-def get_formatted_name(first, last):
-    full_name = first + ' ' + last
-    return full_name.title()
-</code></pre>
-                    </div>
-                    <ul>
-                        <li class="fragment">
-                            <p>Unit Tests and Test Cases</p>
-                        </li>
-                    </ul>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-import unittest
-from name_function import get_formatted_name
-
-class NamesTestCase(unittest.TestCase):
-    def test_first_last_name(self): # should start with test_
-        formatted_name = get_formatted_name('janis', 'joplin')
-        self.assertEqual(formatted_name, 'Janis Joplin')
-
-unittest.main()
-
-.
-----------------------------------------------------------------------
-Ran 1 test in 0.000s
-
-OK
-
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-def get_formatted_name(first, middle, last):
-    full_name = first + ' ' + middle + ' ' + last
-    return full_name.title()
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-E
-======================================================================
-ERROR: test_first_last_name (__main__.NamesTestCase)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "test.py", line 6, in test_first_last_name
-    formatted_name = get_formatted_name('janis', 'joplin')
-TypeError: get_formatted_name() missing 1 required positional argument: 'last'
-
-----------------------------------------------------------------------
-Ran 1 test in 0.000s
-
-FAILED (errors=1)
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-def get_formatted_name(first, last, middle=''):
-    if middle:
-        full_name = first + ' ' + middle + ' ' + last
-    else:
-        full_name = first + ' ' + last
-    return full_name.title()
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-.
-----------------------------------------------------------------------
-Ran 1 test in 0.000s
-
-OK
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-import unittest
-from name_function import get_formatted_name
-class NamesTestCase(unittest.TestCase):
-    def test_first_last_name(self):
-        formatted_name = get_formatted_name('janis', 'joplin')
-        self.assertEqual(formatted_name, 'Janis Joplin')
-    def test_first_last_middle_name(self):
-        formatted_name = get_formatted_name('wolfgang', 'mozart', 'amadeus')
-        self.assertEqual(formatted_name, 'Wolfgang Amadeus Mozart')
-
-unittest.main()
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-..
-----------------------------------------------------------------------
-Ran 2 tests in 0.000s
-
-OK
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <h3>A Variety of Asset Methods</h3>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-assertEqual(a, b) # Verify that a == b
-assertNotEqual(a, b) # Verify that a != b
-assertTrue(x) # Verify that x is True
-assertFalse(x) # Verify that x is False
-assertIn(item, list) # Verify that item is in list
-assertNotIn(item, list) # Verify that item is not in list
-</code></pre>
-                    </div>
-                </section>
-                <section data-background-image="bg.png">
-                    <h3>Testing a Class</h3>
-                    <div id='left'>
                         <div class="fragment">
                             <pre><code class="line-numbers" data-trim contenteditable>
-class AnonymousSurvey():
-
-    def __init__(self, question):
-        self.question = question
-        self.responses = []
-
-    def show_question(self):
-        print(self.question)
-
-    def store_response(self, new_response):
-        self.responses.append(new_response)
-
-    def show_results(self):
-        print("Survey results:")
-        for response in self.responses:
-            print('- ' + response)
+class Car():
+...
 </code></pre>
                         </div>
-                    </div>
-                    <div id='right'>
+                        <li class="fragment">
+                            <p>electric_car.py</p>
+                        </li>
                         <div class="fragment">
                             <pre><code class="line-numbers" data-trim contenteditable>
-from survey import AnonymousSurvey
+from car import Car
 
-question = "What language did you first learn to speak?"
-my_survey = AnonymousSurvey(question)
+class Battery():
+...
 
-my_survey.show_question()
-print("Enter 'q' at any time to quit.\n")
-while True:
-    response = input("Language: ")
-    if response == 'q':
-        break
-    my_survey.store_response(response)
-
-print("\nThank you to everyone who 
-        participated in the survey!")
-my_survey.show_results()
+class ElectricCar(Car):
+...
 </code></pre>
                         </div>
-                    </div>
-                </section>
-                <section>
-                    <h3>Testing the AnonymousSurvey Class</h3>
+                        <li class="fragment">
+                            <p>my_cars.py</p>
+                        </li>
+                    </ul>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-import unittest
-from survey import AnonymousSurvey
-
-class TestAnonmyousSurvey(unittest.TestCase):
-
-    def test_store_single_response(self):
-        question = "What language did you first learn to speak?"
-        my_survey = AnonymousSurvey(question)
-        my_survey.store_response('English')
-        self.assertIn('English', my_survey.responses)
-
-unittest.main()
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-.
-----------------------------------------------------------------------
-Ran 1 test in 0.001s
-
-OK
-</code></pre>
-                    </div>
-                </section>
-                <section>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-import unittest
-from survey import AnonymousSurvey
-
-class TestAnonymousSurvey(unittest.TestCase):
-    def test_store_single_response(self):
---snip--
-
-    def test_store_three_responses(self):
-        question = "What language did you first learn to speak?"
-        my_survey = AnonymousSurvey(question)
-        responses = ['English', 'Spanish', 'Mandarin']
-        for response in responses:
-            my_survey.store_response(response)
-        for response in responses:
-            self.assertIn(response, my_survey.responses)
-
-unittest.main()
-</code></pre>
-                    </div>
-                    <div class="fragment">
-                        <pre><code class="line-numbers" data-trim contenteditable>
-..
-----------------------------------------------------------------------
-Ran 2 tests in 0.000s
-
-OK
+from car import Car
+from electric_car import ElectricCar
 </code></pre>
                     </div>
                 </section>
                 <section>
                     <ul>
                         <li class="fragment">
-                            <p>setUp()</p>
+                            <p>Using code two ways</p>
                         </li>
                     </ul>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
-import unittest
-from survey import AnonymousSurvey
-class TestAnonymousSurvey(unittest.TestCase):
-
-    def setUp(self):
-        question = "What language did you first learn to speak?"
-        self.my_survey = AnonymousSurvey(question)
-        self.responses = ['English', 'Spanish', 'Mandarin']
-
-    def test_store_single_response(self):
-        self.my_survey.store_response(self.responses[0])
-        self.assertIn(self.responses[0], self.my_survey.responses)
-
-    def test_store_three_responses(self):
-        for response in self.responses:
-            self.my_survey.store_response(response)
-        for response in self.responses:
-            self.assertIn(response, self.my_survey.responses)
-
-unittest.main()
+class Person:
+    def __init__(self, name, job=None, pay=0):
+        self.name = name
+        self.job = job
+        self.pay = pay
+#test
+bob = Person('Bob Smith') 
+sue = Person('Sue Jones', job='dev', pay=100000) 
+print(bob.name, bob.pay) 
+print(sue.name, sue.pay) 
 </code></pre>
                     </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Person:
+    def __init__(self, name, job=None, pay=0):
+        self.name = name
+        self.job = job
+        self.pay = pay
+
+if __name__ == '__main__': 
+    # self-test code
+    bob = Person('Bob Smith')
+    sue = Person('Sue Jones', job='dev', pay=100000)
+    print(bob.name, bob.pay)
+    print(sue.name, sue.pay)
+</code></pre>
+                    </div>
+                </section>
+            </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">9.3 3 ways of inheritance</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li>We have learned a way to inherit, i.e., super(). There are other two ways.</li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Person:
+    def __init__(self,name,sex):
+        self.name = name
+        self.sex = sex
+        
+    def print_title(self):
+        if self.sex == "male":
+            print("man")
+        elif self.sex == "female":
+            print("woman")
+
+class Child(Person):                            
+    pass #It does not do anything, but avoid error.
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+if __name__ == '__main__':             
+    May = Child("May","female")
+    Peter = Person("Peter","male")
+
+    print(May.name,May.sex,Peter.name,Peter.sex)    
+    May.print_title()
+    Peter.print_title()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+May female Peter male
+woman
+man
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Check</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Person:
+    pass
+
+class Child(Person):                 
+    pass
+
+May = Child()
+Peter = Person()    
+
+print(isinstance(May,Child))         # True
+print(isinstance(May,Person))        # True
+print(isinstance(Peter,Child))       # False
+print(isinstance(Peter,Person))      # True
+print(issubclass(Child,Person))      # True
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>polymorphism</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Person:
+    def __init__(self,name,sex):
+        self.name = name
+        self.sex = sex
+        
+    def print_title(self):
+        if self.sex == "male":
+            print("man")
+        elif self.sex == "female":
+            print("woman")
+
+class Child(Person):              
+    def print_title(self):
+        if self.sex == "male":
+            print("boy")
+        elif self.sex == "female":
+            print("girl")
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+if __name__ == '__main__':        
+    May = Child("May","female")
+    Peter = Person("Peter","male")
+
+    print(May.name,May.sex,Peter.name,Peter.sex)
+    May.print_title()
+    Peter.print_title()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+May female Peter male
+girl
+man
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p><b>Open/closed principle</b></p>
+                        </li>
+                        <li class="fragment">
+                            <p>Software entities (classes, modules, functions, etc.) should be open for extension, but closed for modification.</p>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Class Constructor</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Person:
+    def __init__(self,name,sex):
+        self.name = name
+        self.sex = sex
+
+class Child(Person):                
+    def __init__(self,name,sex,mother,father):
+        self.name = name
+        self.sex = sex
+        self.mother = mother
+        self.father = father
+
+May = Child("May","female","April","June")
+print(May.name,May.sex,May.mother,May.father)    
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+May female April June   
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Person:
+    def __init__(self,name,sex):
+        self.name = name
+        self.sex = sex
+
+class Child(Person):                          
+    def __init__(self,name,sex,mother,father):
+        Person.__init__(self,name,sex)    
+        self.mother = mother
+        self.father = father
+
+May = Child("May","female","April","June")
+print(May.name,May.sex,May.mother,May.father)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+May female April June
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <p><b>Super(), Common Inheritance, and w/o __init__</b></p>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Person:
+    def __init__(self,name):
+        self.name = name        
+class Child(Person):                            
+    pass #w/o __init__
+if __name__ == '__main__':             
+    May = Child("May")
+    Peter = Person("Peter")
+    print(May.name,Peter.name) 
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+May Peter
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Person:
+    def __init__(self,name):
+        self.name = name
+        print(self.name) #add a print here        
+class Child(Person):                            
+    pass #w/o __init__
+if __name__ == '__main__':             
+    May = Child("May")
+    Peter = Person("Peter")
+    print(May.name,Peter.name) 
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+May
+Peter
+May Peter
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Person:
+    def __init__(self,name):
+        self.name = name
+        print(self.name) #add a print here       
+class Child(Person): 
+    def __init__(self,name):                           
+        self.name = name 
+if __name__ == '__main__':             
+    May = Child("May")
+    Peter = Person("Peter")
+    print(May.name,Peter.name) 
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+Peter
+May Peter
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Person:
+    def __init__(self,name):
+        self.name = name
+        print(self.name) #add a print here        
+class Child(Person): 
+    def __init__(self,name):                           
+        self.name = name 
+        print(self.name)
+if __name__ == '__main__':             
+    May = Child("May")
+    Peter = Person("Peter")
+    print(May.name,Peter.name) 
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+May
+Peter
+May Peter
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Person:
+    def __init__(self,name):
+        self.name = name
+        print(self.name) #add a print here        
+class Child(Person): 
+    def __init__(self,name):                           
+        super().__init__(name) 
+if __name__ == '__main__':             
+    May = Child("May")
+    Peter = Person("Peter")
+    print(May.name,Peter.name) 
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+May
+Peter
+May Peter
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Person:
+    def __init__(self,name):
+        self.name = name
+        print(self.name) #add a print here       
+class Child(Person): 
+    def __init__(self,name):                           
+        Person.__init__(self, name)
+if __name__ == '__main__':             
+    May = Child("May")
+    Peter = Person("Peter")
+    print(May.name,Peter.name) 
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+May
+Peter
+May Peter
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Person:
+    def __init__(self,name):
+        self.name = name
+        print(self.name) #add a print here       
+class Child(Person): 
+    def __init__(self,name):                           
+        super().__init__(name) 
+        #or Person.__init__(self,name)
+        print(self.name)
+if __name__ == '__main__':             
+    May = Child("May")
+    Peter = Person("Peter")
+    print(May.name,Peter.name) 
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+May
+May
+Peter
+May Peter
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Person. and super(). are almost the same <b>for the single inheritance with or without modification</b>. Do not mix them together!</p>
+                        </li>
+                        <li class="fragment">
+                            <p>If you just need completely inheritance of the attributes, then all three ways are equivalent.</p>
+                        </li>
+                        <li class="fragment">
+                            <p>Without Person. super(), __init__ in the child class overwrites the __init__ in the parent class.</p>
+                        </li>
+                        <li class="fragment">
+                            <p>You would better use Person. or super() to inherit or extend the method of the parent class.</p>
+                        </li>
+                        <li class="fragment">
+                            <p>There is no so-called, "new-style-and-classic-classes" (新式类，经典类) in Python 3.x.</p>
+                        </li>
+                    </ul>
                 </section>
             </section>
             <section>
                 <section data-background="#2c3e50" style="color: white; text-align: left;">
                     <h2 style="color: white">Summary</h2>
                     <ul>
-                        <li>File, Test</li>
+                        <li>OOP</li>
                         <ul>
-                            <li>Reading: Python Crash Course, Chapter 10, 11</li>
+                            <li>Reading: Python Crash Course, Chapter 9</li>
                         </ul>
                     </ul>
                 </section>
