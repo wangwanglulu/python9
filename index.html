@@ -25,11 +25,357 @@
         <div class="slides">
             <section data-background-video="bgm.mp4" data-background-video-loop data-background-video-muted style="text-align: left;">
                 <h2 style="color: white">Python Programming</h2>
-                <h5 style="color: white">Lecture 9 Advanced OOP (1)</h5>
+                <h5 style="color: white">Lecture 9 Object-Oriented Programming </h5>
             </section>
             <section>
                 <section data-background="#2980b9" style="color: white">
-                    <h2 style="color: white">9.1 Inheritance</h2>
+                    <h2 style="color: white">9.1 Object-Oriented Programming</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Object-oriented programming is one of the most effective approaches to writing software.</p>
+                        </li>
+                        <li class="fragment">
+                            <p>Python has been an object-oriented language since it existed. Because of this, creating and using classes and objects are downright easy.</p>
+                        </li>
+                        <li class="fragment">
+                            <p>Understanding object-oriented programming will help you see the world as a programmer does. It'll help you really know your code, not just what’s happening line by line, but also the bigger concepts behind it.</p>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Creating and Using a Class</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Dog():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def sit(self):
+        print(self.name.title() + " is now sitting.")
+
+    def roll_over(self):
+        print(self.name.title() + " rolled over!")
+</code></pre>
+                    </div>
+                    <ul>
+                        <li class="fragment">
+                            <p>By convention, capitalized names refer to classes in Python.</p>
+                        </li>
+                        <li class="fragment">
+                            <p>A function that's part of a class is a method.</p>
+                        </li>
+                        <li class="fragment">
+                            <p>The __init__() method is a special method Python runs automatically whenever we create a new instance based on the Dog class.</p>
+                        </li>
+                        <li class="fragment">
+                            <p>Variables that are accessible through instances like this are called <b>attributes</b>.</p>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <div class="fragment"><img data-src="dog.png" style="height: 500pt"></div>
+                </section>
+                <section data-background-image="bg.png">
+                    <div id='left'>
+                        <ul>
+                            <li class="fragment">
+                                <p>Making an Instance from a Class</p>
+                            </li>
+                        </ul>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+class Dog():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def sit(self):
+        print(self.name.title() 
+            + " is now sitting.")
+
+    def roll_over(self):
+        print(self.name.title() 
+            + " rolled over!")
+</code></pre>
+                        </div>
+                    </div>
+                    <div id='right'>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+my_dog = Dog('willie', 6)
+
+print("My dog's name is " 
+    + my_dog.name.title() + ".")
+print("My dog is " 
+    + str(my_dog.age) + " years old.")
+</code></pre>
+                        </div>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+My dog's name is Willie.
+My dog is 6 years old.
+</code></pre>
+                        </div>
+                    </div>
+                    <ul>
+                        <li class="fragment">
+                            <p>my_dog.name</p>
+                        </li>
+                        <li class="fragment">
+                            <p>my_dog.age</p>
+                        </li>
+                    </ul>
+                </section>
+                <section data-background-image="bg.png">
+                    <div id='left'>
+                        <ul>
+                            <li class="fragment">
+                                <p>Creating Multiple Instances</p>
+                            </li>
+                        </ul>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+class Dog():
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def sit(self):
+        print(self.name.title() 
+            + " is now sitting.")
+
+    def roll_over(self):
+        print(self.name.title() 
+            + " rolled over!")
+</code></pre>
+                        </div>
+                    </div>
+                    <div id='right'>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+my_dog.sit()
+my_dog.roll_over()
+</code></pre>
+                        </div>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+Willie is now sitting.
+Willie rolled over!
+</code></pre>
+                        </div>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+my_dog = Dog('willie', 6)
+your_dog = Dog('lucy', 3)
+</code></pre>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Working with Classes and Instances</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+class Car():
+    def __init__(self, make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+        self.odometer_reading = 0
+
+    def get_descriptive_name(self):
+        long_name = str(self.year) + ' ' + self.make + ' ' 
+        + self.model
+        return long_name.title()
+
+    def read_odometer(self):
+        print("This car has " + str(self.odometer_reading) 
+            + " miles on it.")
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+my_new_car = Car('audi', 'a4', 2016)
+print(my_new_car.get_descriptive_name())
+my_new_car.read_odometer()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="line-numbers" data-trim contenteditable>
+2016 Audi A4
+This car has 0 miles on it.
+</code></pre>
+                    </div>
+                </section>
+                <section data-background-image="bg.png">
+                    <div id='leftc'>
+                        <ul>
+                            <li class="fragment">
+                                <p>Modifying Attribute Values</p>
+                            </li>
+                        </ul>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+class Car():
+    def __init__(self, make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+        self.odometer_reading = 0
+
+    def read_odometer(self):
+        print("This car has " 
+            + str(self.odometer_reading) 
+            + " miles on it.")
+</code></pre>
+                        </div>
+                    </div>
+                    <div id='rightc'>
+                        <ul>
+                            <li class="fragment">
+                                <p>Modifying an Attribute's Value Directly</p>
+                            </li>
+                        </ul>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+my_new_car.odometer_reading = 23
+my_new_car.read_odometer()
+</code></pre>
+                        </div>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+2016 Audi A4
+This car has 23 miles on it.
+</code></pre>
+                        </div>
+                    </div>
+                </section>
+                <section data-background-image="bg.png">
+                    <div id='leftc'>
+                        <ul>
+                            <li class="fragment">
+                                <p>Modifying Attribute Values</p>
+                            </li>
+                        </ul>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+class Car():
+    def __init__(self, make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+        self.odometer_reading = 0
+
+    def read_odometer(self):
+        print("This car has " 
+            + str(self.odometer_reading) 
+            + " miles on it.")
+
+    def update_odometer(self, mileage):
+        self.odometer_reading = mileage
+</code></pre>
+                        </div>
+                    </div>
+                    <div id='rightc'>
+                        <ul>
+                            <li class="fragment">
+                                <p>Modifying an Attribute's Value Through a Method</p>
+                            </li>
+                        </ul>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+my_new_car = Car('audi', 'a4', 2016)
+my_new_car.update_odometer(23)
+my_new_car.read_odometer()
+</code></pre>
+                        </div>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+This car has 23 miles on it.
+</code></pre>
+                        </div>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+my_new_car.update_odometer(30)
+my_new_car.read_odometer()
+</code></pre>
+                        </div>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+This car has 30 miles on it.
+</code></pre>
+                        </div>
+                    </div>
+                </section>
+                <section data-background-image="bg.png">
+                    <div id='leftc'>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+class Car():
+    def __init__(self, make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+        self.odometer_reading = 0
+
+    def read_odometer(self):
+        print("This car has " 
+            + str(self.odometer_reading) 
+            + " miles on it.")
+
+    def update_odometer(self, mileage):
+        self.odometer_reading = mileage
+
+    def increment_odometer(self, miles):
+        self.odometer_reading += miles
+</code></pre>
+                        </div>
+                    </div>
+                    <div id='rightc'>
+                        <ul>
+                            <li class="fragment">
+                                <p>Modifying an Attribute's Value Through a Method</p>
+                            </li>
+                        </ul>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+my_new_car = Car('audi', 'a4', 2016)
+my_new_car.update_odometer(23)
+my_new_car.read_odometer()
+</code></pre>
+                        </div>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+This car has 23 miles on it.
+</code></pre>
+                        </div>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+my_used_car.increment_odometer(100)
+my_used_car.read_odometer()
+</code></pre>
+                        </div>
+                        <div class="fragment">
+                            <pre><code class="line-numbers" data-trim contenteditable>
+This car has 123 miles on it.
+</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">9.2 Inheritance</h2>
                 </section>
                 <section>
                     <ul>
@@ -94,7 +440,7 @@ class ElectricCar(Car):
         super().__init__(make, model, year)
         self.battery_size = 70
     def describe_battery(self):
-        print(str(self.battery_size) + "-kWh battery.")
+        print(str(self.battery_size)+"-kWh battery.")
 </code></pre>
                     </div>
                     <div class="fragment">
@@ -123,8 +469,9 @@ class ElectricCar(Car):
     def __init__(self, make, model, year):
         super().__init__(make, model, year)
         self.battery_size = 70
+
     def describe_battery(self):
-        print("This car has a " + str(self.battery_size) + "-kWh battery.")
+        print("This car has a "+str(self.battery_size)+"-kWh battery.")
 
     def get_descriptive_name(self):
         long_name = str(self.year) + ' ' 
@@ -150,7 +497,7 @@ class Battery():
     def __init__(self, battery_size=70):
         self.battery_size = battery_size
     def describe_battery(self):
-        print("This car has a " + str(self.battery_size) + "-kWh battery.")
+        print("This car has a "+str(self.battery_size)+"-kWh battery.")
 
 class ElectricCar(Car):
     def __init__(self, make, model, year):
@@ -173,7 +520,7 @@ This car has a 70-kWh battery.
             </section>
             <section>
                 <section data-background="#2980b9" style="color: white">
-                    <h2 style="color: white">9.2 Importing Classes</h2>
+                    <h2 style="color: white">9.3 Importing Classes</h2>
                 </section>
                 <section>
                     <ul>
@@ -241,10 +588,10 @@ This car can go approximately 240 miles on a full charge.
 from car import Car, ElectricCar
 
 my_beetle = Car('volkswagen', 'beetle', 2016)
-    print(my_beetle.get_descriptive_name())
+print(my_beetle.get_descriptive_name())
 
 my_tesla = ElectricCar('tesla', 'roadster', 2016)
-    print(my_tesla.get_descriptive_name())
+print(my_tesla.get_descriptive_name())
 </code></pre>
                     </div>
                     <div class="fragment">
@@ -333,11 +680,11 @@ if __name__ == '__main__':
             </section>
             <section>
                 <section data-background="#2980b9" style="color: white">
-                    <h2 style="color: white">9.3 3 ways of inheritance</h2>
+                    <h2 style="color: white">9.4 3 ways of inheritance</h2>
                 </section>
                 <section>
                     <ul>
-                        <li>We have learned a way to inherit, i.e., super(). There are other two ways.</li>
+                        <li>We have learned a way to inherit, i.e., super(). There are two other ways.</li>
                     </ul>
                     <div class="fragment">
                         <pre><code class="line-numbers" data-trim contenteditable>
@@ -677,7 +1024,7 @@ May Peter
                             <p>Person. and super(). are almost the same <b>for the single inheritance with or without modification</b>. Do not mix them together!</p>
                         </li>
                         <li class="fragment">
-                            <p>If you just need completely inheritance of the attributes, then all three ways are equivalent.</p>
+                            <p>If you just need complete inheritance of attributes, then all three ways are equivalent.</p>
                         </li>
                         <li class="fragment">
                             <p>Without Person. super(), __init__ in the child class overwrites the __init__ in the parent class.</p>
